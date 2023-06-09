@@ -174,10 +174,15 @@ function callApi(method, url, body, callback){
     xhr.send(body);
     xhr.onload = callback;
 }
+//The callApi function provides a convenient way to make HTTP requests to the Spotify API by handling the request setup, including headers and access token, 
+//and invoking the provided callback function with the response data.
 
 function refreshPlaylists(){
     callApi( "GET", PLAYLISTS, null, handlePlaylistsResponse );
 }
+//The purpose of this function is to initiate a GET request to the Spotify API's playlists endpoint 
+//in order to retrieve the playlists associated with the authenticated user. 
+//The handlePlaylistsResponse function is responsible for handling the response received from the playlists endpoint
 
 function handlePlaylistsResponse(){
     if ( this.status == 200 ){
@@ -195,6 +200,10 @@ function handlePlaylistsResponse(){
         alert(this.responseText);
     }
 }
+//The handlePlaylistsResponse function handles the response received from the playlists endpoint. 
+//It processes the successful response by updating the user interface with the retrieved playlists. 
+//If the response is unauthorized, it triggers the access token refresh process. Otherwise, it logs any error response and displays an alert with the error message.
+
 
 function addPlaylist(item){
     let node = document.createElement("option");
@@ -250,6 +259,7 @@ function transfer(){
     body.device_ids.push(deviceId())
     callApi( "PUT", PLAYER, JSON.stringify(body), handleApiResponse );
 }
+//The purpose of this function is to initiate a PUT request to the Spotify API's player endpoint in order to transfer playback to a specific device
 
 function handleApiResponse(){
     if ( this.status == 200){
@@ -267,6 +277,8 @@ function handleApiResponse(){
         alert(this.responseText);
     }    
 }
+//The handleApiResponse function handles the response received from the API endpoint. 
+//It performs different actions based on the response status, such as logging the response, refreshing the access token, or displaying an error message.
 
 function deviceId(){
     return document.getElementById("devices").value;
@@ -295,6 +307,9 @@ function handleTracksResponse(){
         alert(this.responseText);
     }
 }
+//The handleTracksResponse function handles the response received from the tracks endpoint. 
+//It processes the successful response by updating the user interface with the retrieved tracks. 
+//If the response is unauthorized, it triggers the access token refresh process. Otherwise, it logs any error response and displays an alert with the error message.
 
 function addTrack(item, index){
     let node = document.createElement("option");
@@ -342,6 +357,9 @@ function handleCurrentlyPlayingResponse(){
         alert(this.responseText);
     }
 }
+//The handleCurrentlyPlayingResponse function handles the response received from the currently playing endpoint. 
+//It updates the user interface with the currently playing track, active device, and active playlist information if available. 
+//If the response is unauthorized, it triggers the access token refresh process. Otherwise, it logs any error response and displays an alert with the error message.
 
 function saveNewRadioButton(){
     let item = {};
@@ -351,6 +369,9 @@ function saveNewRadioButton(){
     localStorage.setItem("radio_button", JSON.stringify(radioButtons));
     refreshRadioButtons();
 }
+//The saveNewRadioButton function captures the selected device and playlist, saves them as a radio button configuration in the radioButtons array, 
+//and stores the array in local storage. 
+//This allows the user to save and recall multiple radio button configurations.
 
 function refreshRadioButtons(){
     let data = localStorage.getItem("radio_button");
