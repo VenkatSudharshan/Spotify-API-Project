@@ -369,43 +369,4 @@ function handleCurrentlyPlayingResponse(){
 //It updates the user interface with the currently playing track, active device, and active playlist information if available. 
 //If the response is unauthorized, it triggers the access token refresh process. Otherwise, it logs any error response and displays an alert with the error message.
 
-function saveNewRadioButton(){
-    let item = {};
-    item.deviceId = deviceId();
-    item.playlistId = document.getElementById("playlists").value;
-    radioButtons.push(item);
-    localStorage.setItem("radio_button", JSON.stringify(radioButtons));
-    refreshRadioButtons();
-}
-//The saveNewRadioButton function captures the selected device and playlist, saves them as a radio button configuration in the radioButtons array, 
-//and stores the array in local storage. 
-//This allows the user to save and recall multiple radio button configurations.
 
-function refreshRadioButtons(){
-    let data = localStorage.getItem("radio_button");
-    if ( data != null){
-        radioButtons = JSON.parse(data);
-        if ( Array.isArray(radioButtons) ){
-            removeAllItems("radioButtons");
-            radioButtons.forEach( (item, index) => addRadioButton(item, index));
-        }
-    }
-}
-
-function onRadioButton( deviceId, playlistId ){
-    let body = {};
-    body.context_uri = "spotify:playlist:" + playlistId;
-    body.offset = {};
-    body.offset.position = 0;
-    body.offset.position_ms = 0;
-    callApi( "PUT", PLAY + "?device_id=" + deviceId, JSON.stringify(body), handleApiResponse );
-    //callApi( "PUT", SHUFFLE + "?state=true&device_id=" + deviceId, null, handleApiResponse );
-}
-
-function addRadioButton(item, index){
-    let node = document.createElement("button");
-    node.className = "btn btn-primary m-2";
-    node.innerText = index;
-    node.onclick = function() { onRadioButton( item.deviceId, item.playlistId ) };
-    document.getElementById("radioButtons").appendChild(node);
-}
