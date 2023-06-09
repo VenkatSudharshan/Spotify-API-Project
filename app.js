@@ -1,5 +1,5 @@
 var redirect_uri = "http://127.0.0.1:5500/index.html"; 
-
+//the redirect URI that Spotify will use to redirect the user back to your application after they authorize it.
  
 
 var client_id = ""; 
@@ -22,6 +22,8 @@ const PLAYER = "https://api.spotify.com/v1/me/player";
 const TRACKS = "https://api.spotify.com/v1/playlists/{{PlaylistId}}/tracks";
 const CURRENTLYPLAYING = "https://api.spotify.com/v1/me/player/currently-playing";
 const SHUFFLE = "https://api.spotify.com/v1/me/player/shuffle";
+// These lines declare constants that represent various endpoints of the Spotify Web API. 
+//These endpoints are used to make requests to the API for authorization, token retrieval, playlist retrieval, device retrieval, playback control, and other operations.
 
 function onPageLoad(){
     client_id = localStorage.getItem("client_id");
@@ -45,12 +47,16 @@ function onPageLoad(){
     }
     refreshRadioButtons();
 }
+// This function is called when the page loads. It retrieves the client ID and client secret from the browser's local storage. 
+//It then checks if the URL has a query string (indicating a redirect from Spotify's authorization page). If so, it calls the handleRedirect function.
 
 function handleRedirect(){
     let code = getCode();
     fetchAccessToken( code );
     window.history.pushState("", "", redirect_uri); // 
 }
+//This function is called when the page is redirected back from the Spotify authorization page. 
+//It retrieves the authorization code from the URL query parameters by calling the getCode function
 
 function getCode(){
     let code = null;
@@ -61,6 +67,7 @@ function getCode(){
     }
     return code;
 }
+//The getCode function is used to extract the authorization code from the URL query parameters.
 
 function requestAuthorization(){
     client_id = document.getElementById("clientId").value;
@@ -76,6 +83,8 @@ function requestAuthorization(){
     url += "&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
     window.location.href = url; // 
 }
+//the requestAuthorization function takes the provided client ID and client secret,
+//stores them in the local storage, and redirects the user to the Spotify authorization page to grant the necessary permissions to the application.
 
 function fetchAccessToken( code ){
     let body = "grant_type=authorization_code";
@@ -85,6 +94,8 @@ function fetchAccessToken( code ){
     body += "&client_secret=" + client_secret;
     callAuthorizationApi(body);
 }
+//The fetchAccessToken function prepares the necessary data for the 
+//token exchange request by constructing the request body with the required parameters. The actual HTTP request is then made through the callAuthorizationApi
 
 function refreshAccessToken(){
     refresh_token = localStorage.getItem("refresh_token");
@@ -93,6 +104,8 @@ function refreshAccessToken(){
     body += "&client_id=" + client_id;
     callAuthorizationApi(body);
 }
+//The refreshAccessToken function retrieves the refresh token from the local storage and constructs the necessary data for the token refresh request.
+//The actual HTTP request is then made through the callAuthorizationApi function
 
 function callAuthorizationApi(body){
     let xhr = new XMLHttpRequest();
@@ -102,6 +115,8 @@ function callAuthorizationApi(body){
     xhr.send(body);
     xhr.onload = handleAuthorizationResponse;
 }
+//The callAuthorizationApi function sets up and sends an HTTP POST request to the Spotify token endpoint with the provided request body and headers for authentication.
+//The response handling logic is delegated to the handleAuthorizationResponse function
 
 function handleAuthorizationResponse(){
     if ( this.status == 200 ){
@@ -123,10 +138,14 @@ function handleAuthorizationResponse(){
         alert(this.responseText);
     }
 }
+//The handleAuthorizationResponse function handles the response received from the Spotify token endpoint after making an authorization request.
+//It extracts the access token and refresh token from the response, stores them in the local storage, and proceeds with the application flow.
+//If there is an error, it logs the error message and displays an alert.
 
 function refreshDevices(){
     callApi( "GET", DEVICES, null, handleDevicesResponse );
 }
+//The refreshDevices function is used to refresh the list of devices available for playback.
 
 function handleDevicesResponse(){
     if ( this.status == 200 ){
@@ -143,13 +162,9 @@ function handleDevicesResponse(){
         alert(this.responseText);
     }
 }
-
-function addDevice(item){
-    let node = document.createElement("option");
-    node.value = item.id;
-    node.innerHTML = item.name;
-    document.getElementById("devices").appendChild(node); 
-}
+//The handleDevicesResponse function handles the response received from the devices endpoint. 
+//It processes the successful response by updating the user interface with the retrieved devices. 
+//If the response is unauthorized, it triggers the access token refresh process. Otherwise, it logs any error response and displays an alert with the error message.
 
 function callApi(method, url, body, callback){
     let xhr = new XMLHttpRequest();
