@@ -1,9 +1,9 @@
-var redirect_uri = "https://venkat.github.io/SpotifyWebAPI/"; // change this your value
-//var redirect_uri = "http://127.0.0.1:5500/index.html";
+var redirect_uri = "https://venkat.github.io/SpotifyWebAPI/"; 
+
  
 
 var client_id = ""; 
-var client_secret = ""; // In a real app you should not expose your client_secret to the user
+var client_secret = ""; // should not expose your client_secret to the user
 
 var access_token = null;
 var refresh_token = null;
