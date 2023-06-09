@@ -1,4 +1,4 @@
-var redirect_uri = "https://venkat.github.io/SpotifyWebAPI/"; 
+var redirect_uri = "http://127.0.0.1:5500/index.html"; 
 
  
 
