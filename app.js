@@ -166,6 +166,14 @@ function handleDevicesResponse(){
 //It processes the successful response by updating the user interface with the retrieved devices. 
 //If the response is unauthorized, it triggers the access token refresh process. Otherwise, it logs any error response and displays an alert with the error message.
 
+function addDevice(item){
+    let node = document.createElement("option");
+    node.value = item.id;
+    node.innerHTML = item.name;
+    document.getElementById("devices").appendChild(node); 
+}
+//The addDevice function is responsible for adding a device to the list of available devices in the user interface
+
 function callApi(method, url, body, callback){
     let xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
